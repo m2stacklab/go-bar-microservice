@@ -22,7 +22,6 @@ RUN apk add ca-certificates
 
 COPY --from=build_base /tmp/go-bar-microservice/out/go-bar-microservice /app/go-bar-microservice
 
-# This container exposes port 8080 to the outside world
 EXPOSE 3001
 
 # Run the binary program produced by `go install`
