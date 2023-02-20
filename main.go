@@ -12,6 +12,7 @@ type Message struct {
 	Message  string `json:"message"`
 	Hostname string `json:"hostname"`
 	Version  string `json:"version"`
+	Language string `json:"language"`
 }
 
 func main() {
@@ -21,6 +22,7 @@ func main() {
 	port := os.Getenv("PORT")
 	hostname, _ := os.Hostname()
 	version := "v1.0.1"
+	language := "Go"
 
 	if path == "" {
 		path = "v1/bar"
@@ -38,6 +40,7 @@ func main() {
 		Message:  msg,
 		Hostname: hostname,
 		Version:  version,
+		Language: language,
 	}
 
 	router.HandleFunc("/"+path, func(w http.ResponseWriter, r *http.Request) {
@@ -50,5 +53,6 @@ func main() {
 	log.Printf("Path: %v", path)
 	log.Printf("Port: %v", port)
 	log.Printf("Message: %v", msg)
+	log.Printf("Language: %v", language)
 	http.ListenAndServe(":"+port, router)
 }
