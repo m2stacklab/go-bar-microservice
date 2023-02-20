@@ -9,22 +9,25 @@ import (
 )
 
 type Message struct {
-	Title   string `json:"title"`
-	Version string `json:"version"`
+	Message  string `json:"message"`
+	Hostname string `json:"hostname"`
+	Version  string `json:"version"`
 }
 
 func main() {
 	router := mux.NewRouter()
-	path := os.Getenv("BAR_PATH")
-	title := os.Getenv("TITLE")
+	path := os.Getenv("ROUTE_PATH")
+	msg := os.Getenv("MESSAGE")
 	port := os.Getenv("PORT")
+	hostname, _ := os.Hostname()
+	version := "v1.0.1"
 
 	if path == "" {
-		path = "bar"
+		path = "v1/bar"
 	}
 
-	if title == "" {
-		title = "Hello bar2"
+	if msg == "" {
+		msg = "Hello bar"
 	}
 
 	if port == "" {
@@ -32,8 +35,9 @@ func main() {
 	}
 
 	message := Message{
-		Title:   title,
-		Version: "v1.0.0",
+		Message:  msg,
+		Hostname: hostname,
+		Version:  version,
 	}
 
 	router.HandleFunc("/"+path, func(w http.ResponseWriter, r *http.Request) {
@@ -42,8 +46,9 @@ func main() {
 		json.NewEncoder(w).Encode(message)
 	})
 	log.Println("API is running")
+	log.Printf("Hostname: %v", hostname)
 	log.Printf("Path: %v", path)
 	log.Printf("Port: %v", port)
-	log.Printf("Title: %v", title)
+	log.Printf("Message: %v", msg)
 	http.ListenAndServe(":"+port, router)
 }
